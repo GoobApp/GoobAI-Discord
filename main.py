@@ -244,10 +244,10 @@ async def unbless_user(interaction: discord.Interaction, user: discord.User):
         )
         return
 
-    admin_user_ids.remove(user.id)
+    admin_user_ids.discard(user.id)
 
     await interaction.response.send_message(
-        f"k blessed :goob: 🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪",
+        f"k unblessed :goob: 🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪",
         ephemeral=True,
     )
 
