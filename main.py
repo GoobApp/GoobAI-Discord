@@ -3,6 +3,7 @@ from groq.types.chat import ChatCompletionMessageParam
 import discord
 import dotenv
 import os
+import json
 import requests
 import asyncio
 
@@ -19,6 +20,10 @@ discord_client = discord.Client(
     ),
 )
 tree = discord.app_commands.CommandTree(discord_client)
+
+admin_user_ids: set[int] = set(
+    json.loads(os.getenv("ADMIN_USER_IDS", "[]"))
+)  # probaby shouldnt hardcode peoples user ids without asking them so yeah
 
 # Groq AI stuff
 groq_client = AsyncGroq(api_key=os.environ["GROQ_API_KEY"])
@@ -176,7 +181,8 @@ async def ask(interaction: discord.Interaction, question: str):
 
 
 @tree.command(
-    name="set_prompt", description="YOU DONT GET TO USE ONLY I DO ASKDLFJALSDKJF"
+    name="set_prompt",
+    description="YOU DONT GET TO USE ONLY I (and people i allow) DO ASKDLFJALSDKJF",
 )
 @discord.app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @discord.app_commands.allowed_installs(guilds=True, users=True)
@@ -186,7 +192,10 @@ async def set_prompt(
     global custom_system_prompt
     global remove_original_system_prompt
 
-    if interaction.user.id != OWNER_USER_ID:
+    if (
+        interaction.user.id not in admin_user_ids
+        and interaction.user.id != OWNER_USER_ID
+    ):
         await interaction.response.send_message(
             f"nuh uh you no dont use", ephemeral=True
         )
@@ -197,6 +206,48 @@ async def set_prompt(
 
     await interaction.response.send_message(
         f"k set :goob: 🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪",
+        ephemeral=True,
+    )
+
+
+@tree.command(
+    name="bless_user",
+    description="you dont get to use :) but i can let users ascend into being an admin (able to change goofy goober system prompt). resets in up to 6 hours",
+)
+@discord.app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@discord.app_commands.allowed_installs(guilds=True, users=True)
+async def bless_user(interaction: discord.Interaction, user: discord.User):
+    if interaction.user.id != OWNER_USER_ID:
+        await interaction.response.send_message(
+            f"nuh uh you no dont use", ephemeral=True
+        )
+        return
+
+    admin_user_ids.add(user.id)
+
+    await interaction.response.send_message(
+        f"k blessed :goob: 🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪",
+        ephemeral=True,
+    )
+
+
+@tree.command(
+    name="unbless_user",
+    description="you dont get to use :) but i can let users no longer be admin",
+)
+@discord.app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@discord.app_commands.allowed_installs(guilds=True, users=True)
+async def unbless_user(interaction: discord.Interaction, user: discord.User):
+    if interaction.user.id != OWNER_USER_ID:
+        await interaction.response.send_message(
+            f"nuh uh you no dont use", ephemeral=True
+        )
+        return
+
+    admin_user_ids.remove(user.id)
+
+    await interaction.response.send_message(
+        f"k blessed :goob: 🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪🫪",
         ephemeral=True,
     )
 
