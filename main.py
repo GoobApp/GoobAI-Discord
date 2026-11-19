@@ -212,7 +212,7 @@ async def set_prompt(
 
 @tree.command(
     name="bless_user",
-    description="you dont get to use :) but i can let users ascend into being an admin (able to change goofy goober system prompt). resets in up to 6 hours",
+    description="YOU NO GET TO USE >:(",
 )
 @discord.app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @discord.app_commands.allowed_installs(guilds=True, users=True)
@@ -233,7 +233,7 @@ async def bless_user(interaction: discord.Interaction, user: discord.User):
 
 @tree.command(
     name="unbless_user",
-    description="you dont get to use :) but i can let users no longer be admin",
+    description="YOU NO GET TO USE >:(",
 )
 @discord.app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @discord.app_commands.allowed_installs(guilds=True, users=True)
